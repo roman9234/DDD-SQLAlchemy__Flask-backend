@@ -13,7 +13,7 @@ bp = Blueprint("book", __name__)
 def get_books():
     ctx = get_context(current_app)
 
-    # Возвращает все books в виде dict ипользуя функицю dataclasses
+    # Возвращает все books в виде dict ипользуя функцию dataclasses
     return json.dumps([dataclasses.asdict(b) for b in ctx.book_service.get()])
 
 

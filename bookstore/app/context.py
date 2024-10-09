@@ -1,5 +1,3 @@
-from flask import g
-
 from application.book_service import BookService
 
 # Контекст - механизм Flask для поддержания состояния приложения в момент его выполнения
