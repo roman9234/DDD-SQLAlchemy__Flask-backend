@@ -26,7 +26,6 @@ class BookObject(db.Model):
 class SqlLiteBookRepository(BookRepository):
 
     def __init__(self, storage_name: str):
-        db = SQLAlchemy()
         db.drop_all()
         db.create_all()
 
