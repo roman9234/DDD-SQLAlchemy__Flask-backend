@@ -9,14 +9,15 @@ from bookstore.app.domain.book import Book
 bp = Blueprint("book", __name__)
 
 
-@bp.route("/")
+@bp.get("/")
 def get_books():
     ctx = get_context(current_app)
 
+    # Возвращает все books в виде dict ипользуя функицю dataclasses
     return json.dumps([dataclasses.asdict(b) for b in ctx.book_service.get()])
 
 
-@bp.route("/", methods=["POST"])
+@bp.post("/")
 def add_book():
     ctx = get_context(current_app)
 
@@ -24,8 +25,17 @@ def add_book():
     book_id = ctx.book_service.add(book)
     return {"id": book_id, "book": book}
 
+@bp.route("/<id>", methods=["UPDATE"])
+def update_book(id):
+    ctx = get_context(current_app)
 
-@bp.route("/<id>", methods=["DELETE"])
+    book = Book(**request.json)
+    ctx.book_service.update(id, book)
+
+    return {"id": id, "book": book}
+
+
+@bp.delete("/<id>")
 def delete_book(id):
     ctx = get_context(current_app)
 

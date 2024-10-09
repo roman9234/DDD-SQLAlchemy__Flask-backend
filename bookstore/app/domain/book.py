@@ -1,8 +1,8 @@
 import datetime
 
-from abc import abstractmethod
 from dataclasses import dataclass
 
+# Простой датакласс с полями нашей центральной модели
 @dataclass
 class Book:
     title: str

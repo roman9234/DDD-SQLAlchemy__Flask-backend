@@ -1,13 +1,11 @@
 from flask import g
 
 from application.book_service import BookService
-from infra.storage.mem_storage import MemoryStorage
-from infra.storage.sqlite_storage import SQLiteStorage
 
-
+# Контекст - механизм Flask для поддержания состояния приложения в момент его выполнения
+# В контексте содержутся все сервисы и зависимости
 class Context:
-    def __init__(self):
-        book_storage = SQLiteStorage("test.db")
+    def __init__(self, book_storage):
         self.book_service = BookService(book_storage)
 
 

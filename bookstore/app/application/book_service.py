@@ -1,3 +1,7 @@
+# Проксирует запросы
+# Позволяет выбрать ORM для взаимодействия
+# ORM должен быть наследником абстрактного класса BookRepository
+
 class BookService:
     def __init__(self, storage):
         self.storage = storage
@@ -10,3 +14,6 @@ class BookService:
 
     def get(self):
         return self.storage.get()
+
+    def update(self, id, book):
+        self.storage.update(id, book)
