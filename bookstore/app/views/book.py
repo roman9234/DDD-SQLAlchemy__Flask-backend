@@ -3,8 +3,8 @@ import json
 
 from flask import Blueprint, current_app, request
 
-from context import get_context
-from domain.book import Book
+from bookstore.app.context import get_context
+from bookstore.app.domain.book import Book
 
 bp = Blueprint("book", __name__)
 

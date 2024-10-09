@@ -1,4 +1,4 @@
-from domain.book import Book
+from bookstore.app.domain.book import Book
 
 
 class MemoryStorage:
