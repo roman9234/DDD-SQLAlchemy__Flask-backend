@@ -20,8 +20,9 @@ def create_app():
 
     # Задаём Config и создаём Instance book_storage, который будем использовать как БД
     _app.config["SQLALCHEMY_DATABASE_URI"] = f'sqlite:///{db_name}'
-
     db.init_app(_app)
+    # MemoryStorage работает, SqlLiteBookRepository - нет
+    # book_storage = MemoryStorage()
     book_storage = SqlLiteBookRepository(db_name)
     _app.config["CONTEXT"] = Context(book_storage)
 
