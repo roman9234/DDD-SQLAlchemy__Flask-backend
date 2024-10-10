@@ -1,47 +1,47 @@
-import dataclasses
-from typing import List
+from sqlite3 import Connection
+from flask import g
 
 from bookstore.app.domain.book import Book
-from bookstore.app.infra.storage.book_repository import BookRepository
 
 
-from flask_sqlalchemy import SQLAlchemy
-from sqlalchemy import func
-from sqlalchemy.orm import relationship
+class SQLiteConnect(Connection):
+    def create_table(self):
+        temp_table = '''CREATE TABLE IF NOT EXISTS BOOKS (title TEXT,
+                     description TEXT,publish_year INT,
+                     pages_count INT,created_at DATETIME);'''
+        self.execute(temp_table)
 
-db = SQLAlchemy()
+    def add_row(self, row):
+        self.execute("INSERT INTO BOOKS VALUES (?,?,?,?,?);",
+                     (row.title, row.description, row.publish_year,
+                      row.pages_count, row.created_at))
+        return self.execute("SELECT FROM BOOKS VALUES (?,?,?,?,?);")
 
-class BookObject(db.Model):
-    # __tablename__ = "user_account"
-    id = db.Column(db.Integer, primary_key=True)
-    title = db.Column(db.String, nullable=False)
-    description = db.Column(db.String, nullable=False)
-    publish_year = db.Column(db.Integer, nullable=False)
-    pages_count = db.Column(db.Integer, nullable=False)
-    created_at = db.Column(db.DateTime, nullable=False, default=func.now())
-    def __repr__(self):
-        return f"Book(name={self.title!r},id={self.id!r}"
+    def del_row(self, id):
+        temp_del = "DELETE FROM BOOKS WHERE title={};"
+        self.execute(temp_del.format(id))
+
+    def get_table(self):
+        return self.execute('SELECT * from BOOKS')
 
 
-class SqlLiteBookRepository(BookRepository):
+class SQLiteStorage:
+    def __init__(self, database):
+        self._database = database
+        with SQLiteConnect(self._database) as conn:
+            conn.create_table()
+            # self.books = SQLiteConnect.create_table('BOOKS')
 
-    def __init__(self, storage_name: str):
-        db.drop_all()
-        db.create_all()
+    def add(self, item):
+        with SQLiteConnect(self._database) as conn:
+            conn.add_row(item)
 
-    def add(self, book: Book) -> int:
-        bo = BookObject(**dataclasses.asdict(book))
-        db.session.add(bo)
+    def delete(self, id):
+        with SQLiteConnect(self._database) as conn:
+            conn.del_row(id)
 
-    def get(self) -> List[Book]:
-        books = []
-        for x in BookObject.query.order_by(BookObject.id.desc()):
-            book = Book(**BookObject.__dict__)
-            books.append(book)
-        return books
 
-    def update(self, id, book: Book):
-        pass
-
-    def delete(self, id: int):
-        pass
+    def get(self):
+        with SQLiteConnect(self._database) as conn:
+            result = conn.get_table()
+            return result.fetchmany()

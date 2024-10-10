@@ -2,7 +2,7 @@ from flask import Flask, g
 from context import Context
 from views.book_controllers import bp as book_bp
 
-from bookstore.app.infra.storage.sqlite_storage import db, SqlLiteBookRepository
+from bookstore.app.infra.storage.sqlite_storage import SQLiteStorage
 from application.book_service import BookService
 from infra.storage.mem_storage import MemoryStorage
 
