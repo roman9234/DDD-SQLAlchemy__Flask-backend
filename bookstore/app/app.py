@@ -11,32 +11,39 @@ from infra.storage.mem_storage import MemoryStorage
 
 # В этом файле мы определяем приложение Flask, инициализируем контекст
 
-db_name = "test.db"
+# db_name = "test.db"
 
 
 def create_app():
     _app = Flask(__name__)
+    _app.register_blueprint(book_bp, url_prefix="/books")
+    _app.config['CONTEXT'] = Context()
+    return _app
+
+app = create_app()
+
+if __name__ == "__main__":
+    app.run(debug=True)
+
 
     # Натсройка конфигурации БД
-    _app.config["SQLALCHEMY_DATABASE_URI"] = f'sqlite:///{db_name}'
+    # _app.config["SQLALCHEMY_DATABASE_URI"] = f'sqlite:///{db_name}'
     # Если в поле ниже установлен в True, то Flask-SQLAlchemy будет отслеживать изменения объектов
     # и посылать сигналы
     # _app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = f'sqlite:///{db_name}'
 
     # Регистрация Blueprint
-    _app.register_blueprint(book_bp, url_prefix="/books")
 
 
     # Создаем контекст и добавляем его в app.config
     # book_storage = MemoryStorage()
 
     # Инициализация БД
-    with _app.app_context():
-        db.init_app(_app)
-    book_storage = SqlLiteBookRepository(db_name)
+    # with _app.app_context():
+    #     db.init_app(_app)
+    # book_storage = SqlLiteBookRepository(db_name)
 
     # book_storage = MemoryStorage()
-    _app.config['CONTEXT'] = Context(book_storage)
 
     # Добавляем контекст перед каждым запросом
     # @_app.before_request
@@ -51,10 +58,5 @@ def create_app():
     # def teardown_request(exception=None):
     #     g.pop('CONTEXT', None)
 
-    return _app
 
 
-app = create_app()
-
-if __name__ == "__main__":
-    app.run(debug=True)

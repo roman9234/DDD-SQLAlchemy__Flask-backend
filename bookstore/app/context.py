@@ -1,9 +1,11 @@
 from application.book_service import BookService
+from infra.storage.sqlite_storage import SqlLiteBookRepository
 
 # Контекст - механизм Flask для поддержания состояния приложения в момент его выполнения
 # В контексте содержутся все сервисы и зависимости
 class Context:
-    def __init__(self, book_storage):
+    def __init__(self):
+        book_storage = SqlLiteBookRepository("test.db")
         self.book_service = BookService(book_storage)
 
 
