@@ -7,6 +7,7 @@ class BookService:
         self.storage = storage
 
     def add(self, book):
+        # TODO отлов ошибок при добавлении одинаковых книг
         return self.storage.add(book)
 
     def delete(self, id):

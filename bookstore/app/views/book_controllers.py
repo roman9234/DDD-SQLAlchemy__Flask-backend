@@ -14,7 +14,8 @@ def get_books():
     ctx = get_context(current_app)
 
     # Возвращает все books в виде dict ипользуя функцию dataclasses
-    return json.dumps([dataclasses.asdict(b) for b in ctx.book_service.get()])
+    # return json.dumps([dataclasses.asdict(b) for b in ctx.book_service.get()])
+    return json.dumps(ctx.book_service.get())
 
 
 @bp.post("/")

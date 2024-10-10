@@ -11,11 +11,11 @@ curl -L "http://127.0.0.1:5000/books/" -XPOST --json "{\"title\":\"title of book
 curl -L "http://127.0.0.1:5000/books/" -XGET
 
 Удаление книг:
-curl -L "http://127.0.0.1:5000/books/0" -XDELETE
+curl -L "http://127.0.0.1:5000/books/1" -XDELETE
 
 Обновление книг:
 
-curl -L "http://127.0.0.1:5000/books/1" -XUPDATE --json "{\"title\":\"title of UPDATED book 2\",\"description\":\"book 2 description\",\"publish_year\":\"2007\",\"pages_count\":\"300\",\"created_at\":\"2021-01-01\"}"
+curl -L "http://127.0.0.1:5000/books/2" -XUPDATE --json "{\"title\":\"title of UPDATED book 2\",\"description\":\"book 2 description\",\"publish_year\":\"2007\",\"pages_count\":\"300\",\"created_at\":\"2021-01-01\"}"
 
 
 За что отвечают разделы (подробнее в файлах)
